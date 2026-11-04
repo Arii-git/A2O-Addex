@@ -27,3 +27,6 @@ detailed placement, CTS, global route, detailed route, filler, signoff.
 - reports/congestion.rpt was not produced
 - def_to_gds.py is not in the container and write_gds is not in this OpenROAD build
 - The layout is gcd, not the A2O core
+
+## Screenshots
+- 03_GCD_openroad_lay.png: OpenROAD GUI showing the routed gcd layout loaded from results/gcd_final.odb
