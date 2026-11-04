@@ -6,8 +6,6 @@
  \----------------------------------------------------------------------------/
  Yosys 0.68+post (git sha1 UNKNOWN, Release, GNU /usr/local/bin/wrapped-cc/g++ 11.4.0)
 
--- Executing script file `gcd_synth.ys' --
-
 1. Executing Liberty frontend: /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
 Imported 135 cell types from liberty file.
 
@@ -807,10 +805,11 @@ Found and reported 0 problems.
 Dumping module `\gcd'.
 
 25. Generating Graphviz representation of design.
-Writing dot description to `gcd_schematic.dot'.
+Writing dot description to `/root/.yosys_show.dot'.
 Dumping module gcd to page 1.
+Exec: { test -f '/root/.yosys_show.dot.pid' && fuser -s '/root/.yosys_show.dot.pid' 2> /dev/null; } || ( echo $$ >&3; exec xdot '/root/.yosys_show.dot'; ) 3> '/root/.yosys_show.dot.pid' &
 
 Warnings: 2 unique messages, 2 total
-End of script. Logfile hash: a8f2bccb93, time: 0.65s, user: 0.21s, system: 0.08s, MEM: 43.56 MB peak
+End of script. Logfile hash: 3eb3955b33, time: 390.65s, user: 0.28s, system: 0.16s, MEM: 41.27 MB peak
 Yosys 0.68+post (git sha1 UNKNOWN, Release, GNU /usr/local/bin/wrapped-cc/g++ 11.4.0)
-Time spent: 29% 1x abc (0 sec), 12% 2x read_liberty (0 sec), ...
+Time spent: 26% 1x abc (0 sec), 9% 14x opt_clean (0 sec), ...
