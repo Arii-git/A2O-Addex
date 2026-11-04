@@ -844,7 +844,7 @@ module xu0_dec(
          ex0_is_mtcrf,    ex0_is_mtmsr,     ex0_is_mtspr,     ex0_is_wrtee,
          ex0_is_wrteei,   ex0_is_eratwe,    ex0_is_erativax,  ex0_is_eratsx;
    wire  ex1_opcode_is_31, ex1_opcode_is_19, ex1_opcode_is_0;
-   wire  ex1_is_adde,     ex1_is_addi,     ex1_is_addic,    ex1_is_addicr,   ex1_is_addis,    ex1_is_addme,
+   wire  ex1_is_adde,     ex1_is_addex,    ex1_is_addi,     ex1_is_addic,    ex1_is_addicr,   ex1_is_addis,    ex1_is_addme,
          ex1_is_addze,    ex1_is_andir,    ex1_is_andisr,   ex1_is_cmp,      ex1_is_cmpi,     ex1_is_cmpl,
          ex1_is_cmpli,    ex1_is_neg,      ex1_is_ori,      ex1_is_mulldo,   ex1_is_dnh,
          ex1_is_mulhd,    ex1_is_mulhdu,   ex1_is_mulhw,    ex1_is_mulhwu,   ex1_is_mulld,    ex1_is_attn,
@@ -1055,12 +1055,14 @@ module xu0_dec(
    assign ex0_rs1_sel_zero_trm1 = (|ex1_ord_val_q & ex1_is_erativax) ? ~ex1_s3_v_q : ~rv_xu0_ex0_s1_v;
 
    assign ex1_add_ci_sel[0]      =  ex1_is_adde    | ex1_is_addme    | ex1_is_addze |
-                                    ex1_is_subfme  | ex1_is_subfze   | ex1_is_subfe;
+                                    ex1_is_subfme  | ex1_is_subfze   | ex1_is_subfe   |
+                                    ex1_is_addex;
    // CI uses 1
    assign ex1_add_ci_sel[1]      =  ex1_is_subf    | ex1_is_subfc    | ex1_is_subfic |
-                                    ex1_is_neg     | ex1_alu_cmp     | ex1_any_trap;
+                                    ex1_is_neg     | ex1_alu_cmp     | ex1_any_trap   |
+                                    ex1_is_addex;
 
-   assign ex1_add_rs1_inv        =  ex1_add_ci_sel[1] |
+   assign ex1_add_rs1_inv        =  (ex1_add_ci_sel[1] & ~ex1_is_addex) |
                                     ex1_is_subfme  | ex1_is_subfze   | ex1_is_subfe;
 
    assign ex1_any_tw             = ex1_is_tw | ex1_is_twi;
@@ -1086,11 +1088,12 @@ module xu0_dec(
                                     ex1_is_subfe   | ex1_is_subfze   | ex1_is_srad     |
                                     ex1_is_sradi   | ex1_is_sraw     | ex1_is_srawi    ;
 
-   assign dec_alu_ex1_xer_ov_en  = ex1_instr_q[21] & (
+   assign dec_alu_ex1_xer_ov_en  = (ex1_instr_q[21] & (
                                     ex1_is_add     | ex1_is_addc     | ex1_is_adde     |
                                     ex1_is_addme   | ex1_is_addze    | ex1_is_subf     |
                                     ex1_is_subfc   | ex1_is_subfe    | ex1_is_subfme   |
-                                    ex1_is_subfze  | ex1_is_neg);
+                                    ex1_is_subfze  | ex1_is_neg))
+                                    | ex1_is_addex;
 
    assign ex1_any_popcnt         =  ex1_is_popcntb | ex1_is_popcntw  | ex1_is_popcntd;
 
@@ -1780,6 +1783,7 @@ module xu0_dec(
    assign ex1_is_add       = (ex1_opcode_is_31  &  ex1_instr_q[22:30]   ==  9'b100001010)             ? 1'b1 : 1'b0;
    assign ex1_is_addc      = (ex1_opcode_is_31  &  ex1_instr_q[22:30]   ==  9'b000001010)             ? 1'b1 : 1'b0;
    assign ex1_is_adde      = (ex1_opcode_is_31  &  ex1_instr_q[22:30]   ==  9'b010001010)             ? 1'b1 : 1'b0;
+   assign ex1_is_addex     = (ex1_opcode_is_31  &  (ex1_instr_q[23:30]  ==  8'b10101010)  &  (ex1_instr_q[21:22]  ==  2'b00))    ? 1'b1 : 1'b0;
    assign ex1_is_addi      = (                     ex1_instr_q[0:5]     ==  6'b001110)                ? 1'b1 : 1'b0;
    assign ex1_is_addic     = (                     ex1_instr_q[0:5]     ==  6'b001100)                ? 1'b1 : 1'b0;
    assign ex1_is_addicr    = (                     ex1_instr_q[0:5]     ==  6'b001101)                ? 1'b1 : 1'b0;

@@ -207,7 +207,8 @@ module xu_alu(
    //---------------------------------------------------------------
    // Rotate / Logical
    //---------------------------------------------------------------
-   assign ex2_add_ci = (dec_alu_ex2_add_ci_sel == 2'b10) ? byp_alu_ex2_xer[2] :
+   assign ex2_add_ci = (dec_alu_ex2_add_ci_sel == 2'b11) ? byp_alu_ex2_xer[1] :
+                       (dec_alu_ex2_add_ci_sel == 2'b10) ? byp_alu_ex2_xer[2] :
                        (dec_alu_ex2_add_ci_sel == 2'b01) ? 1'b1 :
                                                            1'b0;
 

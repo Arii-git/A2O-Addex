@@ -308,6 +308,7 @@ module xu1_dec(
    wire                                            ex1_opcode_is_62;
    wire                                            ex1_opcode_is_31;
    wire                                            ex1_is_adde;
+   wire                                            ex1_is_addex; 
    wire                                            ex1_is_addi;
    wire                                            ex1_is_addic;
    wire                                            ex1_is_addicr;
@@ -424,11 +425,11 @@ module xu1_dec(
    assign dec_byp_ex2_tid           = ex2_stq_val_q;
 
    // CI uses XER[CA]
-   assign ex1_add_ci_sel[0] = ex1_is_adde | ex1_is_addme | ex1_is_addze | ex1_is_subfme | ex1_is_subfze | ex1_is_subfe;
+  assign ex1_add_ci_sel[0] = ex1_is_adde | ex1_is_addme | ex1_is_addze | ex1_is_subfme | ex1_is_subfze | ex1_is_subfe | ex1_is_addex;
    // CI uses 1
-   assign ex1_add_ci_sel[1] = ex1_is_subf | ex1_is_subfc | ex1_is_subfic | ex1_is_neg | ex1_alu_cmp | ex1_any_trap;
-
-   assign ex1_add_rs1_inv  = ex1_add_ci_sel[1] | ex1_is_subfme | ex1_is_subfze | ex1_is_subfe;
+   assign ex1_add_ci_sel[1] = ex1_is_subf | ex1_is_subfc | ex1_is_subfic | ex1_is_neg | ex1_alu_cmp | ex1_any_trap | ex1_is_addex;
+   // CI uses XER[OV] (addex, spare encoding 2'b11)
+   assign ex1_add_rs1_inv  = (ex1_add_ci_sel[1] & ~ex1_is_addex) | ex1_is_subfme | ex1_is_subfze | ex1_is_subfe;
 
    assign ex1_any_tw       = ex1_is_tw | ex1_is_twi;
    assign ex1_any_td       = ex1_is_td | ex1_is_tdi;
@@ -451,9 +452,10 @@ module xu1_dec(
                                    ex1_is_subfc | ex1_is_subfic | ex1_is_subfme | ex1_is_subfe | ex1_is_subfze |
                                    ex1_is_srad  | ex1_is_sradi  | ex1_is_sraw   | ex1_is_srawi;
 
-   assign dec_alu_ex1_xer_ov_en  = ex1_instr_q[21] & (
+  assign dec_alu_ex1_xer_ov_en  = (ex1_instr_q[21] & (
                                    ex1_is_add   | ex1_is_addc   | ex1_is_adde   | ex1_is_addme  | ex1_is_addze  |
-                                   ex1_is_subf  | ex1_is_subfc  | ex1_is_subfe  | ex1_is_subfme | ex1_is_subfze | ex1_is_neg);
+                                   ex1_is_subf  | ex1_is_subfc  | ex1_is_subfe  | ex1_is_subfme | ex1_is_subfze | ex1_is_neg))
+                                   | ex1_is_addex;
 
    //----------------------------------------------------------------------------------------------------------------------------------------
    // Immediate Logic
@@ -619,6 +621,7 @@ module xu1_dec(
    assign ex1_is_add          = ex1_opcode_is_31 & ex1_instr_q[22:30] == 9'b100001010;      // 31/266
    assign ex1_is_addc         = ex1_opcode_is_31 & ex1_instr_q[22:30] == 9'b000001010;      // 31/10
    assign ex1_is_adde         = ex1_opcode_is_31 & ex1_instr_q[22:30] == 9'b010001010;      // 31/138
+   assign ex1_is_addex        = ex1_opcode_is_31 & (ex1_instr_q[23:30] == 8'b10101010) & (ex1_instr_q[21:22] == 2'b00);   // 31/170, Z23-form
    assign ex1_is_addi         =                    ex1_instr_q[0:5]   == 6'b001110;         // 14
    assign ex1_is_addic        =                    ex1_instr_q[0:5]   == 6'b001100;         // 12
    assign ex1_is_addicr       =                    ex1_instr_q[0:5]   == 6'b001101;         // 13
