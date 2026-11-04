@@ -5,7 +5,8 @@
  |  Distributed under an ISC-like license, type "license" to see terms        |
  \----------------------------------------------------------------------------/
  Yosys 0.68+post (git sha1 UNKNOWN, Release, GNU /usr/local/bin/wrapped-cc/g++ 11.4.0)
-ERROR: File `/OpenROAD-flow-' not found or is a directory
+
+-- Executing script file `gcd_synth.ys' --
 
 1. Executing Liberty frontend: /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
 Imported 135 cell types from liberty file.
@@ -689,6 +690,7 @@ Optimizing module gcd.
 15. Executing ABC pass (technology mapping using ABC).
 
 15.1. Extracting gate netlist of module `\gcd' to `<abc-temp-dir>/input.blif'..
+ABC: using cached merged SCL: /tmp/yosys-liberty-scl-cache/yosys_merged_28d360c5.scl (1 files)
 Replacing 16 occurrences of constant undef bits with constant zero bits
 
 15.1.1. Executed ABC.
@@ -803,14 +805,12 @@ Found and reported 0 problems.
 
 24. Executing Verilog backend.
 Dumping module `\gcd'.
-ERROR: No such command: exit (type 'help' for a command overview)
 
-25. Executing Verilog backend.
-Dumping module `\gcd'.
-ERROR: No such command: exit (type 'help' for a command overview)
-ERROR: No such command: quit (type 'help' for a command overview)
+25. Generating Graphviz representation of design.
+Writing dot description to `gcd_schematic.dot'.
+Dumping module gcd to page 1.
 
 Warnings: 2 unique messages, 2 total
-End of script. Logfile hash: 8a2bddda59, time: 241.75s, user: 0.25s, system: 0.11s, MEM: 44.30 MB peak
+End of script. Logfile hash: a8f2bccb93, time: 0.65s, user: 0.21s, system: 0.08s, MEM: 43.56 MB peak
 Yosys 0.68+post (git sha1 UNKNOWN, Release, GNU /usr/local/bin/wrapped-cc/g++ 11.4.0)
-Time spent: 424398115% 1x abc (0 sec), 78177360% 3x read_verilog (0 sec), ...
+Time spent: 29% 1x abc (0 sec), 12% 2x read_liberty (0 sec), ...

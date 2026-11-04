@@ -1,4 +1,5 @@
-# gcd_synth.ys - GCD design, Yosys synthesis for Nangate45
+# gcd_synth.ys - GCD synthesis for Nangate45
+# Run: yosys -l synth.log -s gcd_synth.ys
 read_liberty -lib /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
 read_verilog /OpenROAD-flow-scripts/flow/designs/src/gcd/gcd.v
 hierarchy -check -top gcd
@@ -21,5 +22,6 @@ opt_clean -purge
 hilomap -singleton -hicell LOGIC1_X1 Z -locell LOGIC0_X1 Z
 insbuf -buf BUF_X1 A Z
 check
-stat -liberty /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
+tee -o gcd_stat.txt stat -liberty /OpenROAD-flow-scripts/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib
 write_verilog -noattr -noexpr -nohex -nodec gcd_netlist.v
+show -format dot -prefix gcd_schematic -viewer none -stretch
