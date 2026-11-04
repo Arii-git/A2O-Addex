@@ -1,0 +1,172 @@
+VCD info: dumpfile tb_addex.vcd opened for output.
+---------------------------------------------
+Test 1: basic positive+positive, carry-in=1
+ RA=5 (0x0000000000000005) RB=3 (0x0000000000000003) msb_64b_sel=0
+ OV_in=1 CA_in=1 SO_in=0
+ PASS: EX2 RT = 0x0000000000000009 as expected
+ PASS: EX3 RT = 0x0000000000000009 as expected
+ PASS: EX3 XER[OV] = 0 as expected
+ PASS: EX3 XER[CA] = 1 as expected (unchanged)
+ PASS: EX3 XER[SO] = 0 as expected (sticky: SO_in OR OV_out)
+---------------------------------------------
+Test 2: basic positive+positive, carry-in=0
+ RA=5 (0x0000000000000005) RB=3 (0x0000000000000003) msb_64b_sel=0
+ OV_in=0 CA_in=1 SO_in=0
+ PASS: EX2 RT = 0x0000000000000008 as expected
+ PASS: EX3 RT = 0x0000000000000008 as expected
+ PASS: EX3 XER[OV] = 0 as expected
+ PASS: EX3 XER[CA] = 1 as expected (unchanged)
+ PASS: EX3 XER[SO] = 0 as expected (sticky: SO_in OR OV_out)
+---------------------------------------------
+Test 3: zero+zero, carry-in=1
+ RA=0 (0x0000000000000000) RB=0 (0x0000000000000000) msb_64b_sel=0
+ OV_in=1 CA_in=0 SO_in=1
+ PASS: EX2 RT = 0x0000000000000001 as expected
+ PASS: EX3 RT = 0x0000000000000001 as expected
+ PASS: EX3 XER[OV] = 0 as expected
+ PASS: EX3 XER[CA] = 0 as expected (unchanged)
+ PASS: EX3 XER[SO] = 1 as expected (sticky: SO_in OR OV_out)
+---------------------------------------------
+Test 4: zero+zero, carry-in=0
+ RA=0 (0x0000000000000000) RB=0 (0x0000000000000000) msb_64b_sel=0
+ OV_in=0 CA_in=1 SO_in=0
+ PASS: EX2 RT = 0x0000000000000000 as expected
+ PASS: EX3 RT = 0x0000000000000000 as expected
+ PASS: EX3 XER[OV] = 0 as expected
+ PASS: EX3 XER[CA] = 1 as expected (unchanged)
+ PASS: EX3 XER[SO] = 0 as expected (sticky: SO_in OR OV_out)
+---------------------------------------------
+Test 5: one operand zero (RB=0)
+ RA=42 (0x000000000000002a) RB=0 (0x0000000000000000) msb_64b_sel=0
+ OV_in=0 CA_in=0 SO_in=0
+ PASS: EX2 RT = 0x000000000000002a as expected
+ PASS: EX3 RT = 0x000000000000002a as expected
+ PASS: EX3 XER[OV] = 0 as expected
+ PASS: EX3 XER[CA] = 0 as expected (unchanged)
+ PASS: EX3 XER[SO] = 0 as expected (sticky: SO_in OR OV_out)
+---------------------------------------------
+Test 6: one operand zero (RA=0)
+ RA=0 (0x0000000000000000) RB=42 (0x000000000000002a) msb_64b_sel=0
+ OV_in=0 CA_in=0 SO_in=0
+ PASS: EX2 RT = 0x000000000000002a as expected
+ PASS: EX3 RT = 0x000000000000002a as expected
+ PASS: EX3 XER[OV] = 0 as expected
+ PASS: EX3 XER[CA] = 0 as expected (unchanged)
+ PASS: EX3 XER[SO] = 0 as expected (sticky: SO_in OR OV_out)
+---------------------------------------------
+Test 7: both operands negative (-5 + -3 = -8)
+ RA=-5 (0xfffffffffffffffb) RB=-3 (0xfffffffffffffffd) msb_64b_sel=0
+ OV_in=0 CA_in=0 SO_in=0
+ PASS: EX2 RT = 0xfffffffffffffff8 as expected
+ PASS: EX3 RT = 0xfffffffffffffff8 as expected
+ PASS: EX3 XER[OV] = 0 as expected
+ PASS: EX3 XER[CA] = 0 as expected (unchanged)
+ PASS: EX3 XER[SO] = 0 as expected (sticky: SO_in OR OV_out)
+---------------------------------------------
+Test 8: mixed sign: RA positive, RB negative (20 + -8 = 12)
+ RA=20 (0x0000000000000014) RB=-8 (0xfffffffffffffff8) msb_64b_sel=0
+ OV_in=0 CA_in=0 SO_in=0
+ PASS: EX2 RT = 0x000000000000000c as expected
+ PASS: EX3 RT = 0x000000000000000c as expected
+ PASS: EX3 XER[OV] = 0 as expected
+ PASS: EX3 XER[CA] = 0 as expected (unchanged)
+ PASS: EX3 XER[SO] = 0 as expected (sticky: SO_in OR OV_out)
+---------------------------------------------
+Test 9: mixed sign: RA negative, RB positive (-20 + 8 = -12)
+ RA=-20 (0xffffffffffffffec) RB=8 (0x0000000000000008) msb_64b_sel=0
+ OV_in=0 CA_in=0 SO_in=0
+ PASS: EX2 RT = 0xfffffffffffffff4 as expected
+ PASS: EX3 RT = 0xfffffffffffffff4 as expected
+ PASS: EX3 XER[OV] = 0 as expected
+ PASS: EX3 XER[CA] = 0 as expected (unchanged)
+ PASS: EX3 XER[SO] = 0 as expected (sticky: SO_in OR OV_out)
+---------------------------------------------
+Test 10: general-purpose values with carry-in (corrected expected value)
+ RA=305419896 (0x0000000012345678) RB=2271560481 (0x0000000087654321) msb_64b_sel=0
+ OV_in=1 CA_in=0 SO_in=1
+ PASS: EX2 RT = 0x000000009999999a as expected
+ PASS: EX3 RT = 0x000000009999999a as expected
+ PASS: EX3 XER[OV] = 0 as expected
+ PASS: EX3 XER[CA] = 0 as expected (unchanged)
+ PASS: EX3 XER[SO] = 1 as expected (sticky: SO_in OR OV_out)
+---------------------------------------------
+Test 11: RA=all-ones (-1), carry-in=0, no wraparound
+ RA=-1 (0xffffffffffffffff) RB=0 (0x0000000000000000) msb_64b_sel=0
+ OV_in=0 CA_in=0 SO_in=0
+ PASS: EX2 RT = 0xffffffffffffffff as expected
+ PASS: EX3 RT = 0xffffffffffffffff as expected
+ PASS: EX3 XER[OV] = 0 as expected
+ PASS: EX3 XER[CA] = 0 as expected (unchanged)
+ PASS: EX3 XER[SO] = 0 as expected (sticky: SO_in OR OV_out)
+---------------------------------------------
+Test 12: RA=all-ones (-1), carry-in=1: unsigned wraps to 0, NOT signed overflow
+ RA=-1 (0xffffffffffffffff) RB=0 (0x0000000000000000) msb_64b_sel=0
+ OV_in=1 CA_in=1 SO_in=0
+ PASS: EX2 RT = 0x0000000000000000 as expected
+ PASS: EX3 RT = 0x0000000000000000 as expected
+ PASS: EX3 XER[OV] = 0 as expected
+ PASS: EX3 XER[CA] = 1 as expected (unchanged)
+ PASS: EX3 XER[SO] = 0 as expected (sticky: SO_in OR OV_out)
+---------------------------------------------
+Test 13: mixed sign with carry-in=1 (-10 + 15 + 1 = 6)
+ RA=-10 (0xfffffffffffffff6) RB=15 (0x000000000000000f) msb_64b_sel=0
+ OV_in=1 CA_in=0 SO_in=0
+ PASS: EX2 RT = 0x0000000000000006 as expected
+ PASS: EX3 RT = 0x0000000000000006 as expected
+ PASS: EX3 XER[OV] = 0 as expected
+ PASS: EX3 XER[CA] = 0 as expected (unchanged)
+ PASS: EX3 XER[SO] = 0 as expected (sticky: SO_in OR OV_out)
+---------------------------------------------
+Test 14: positive signed overflow (max pos + 1), msb_64b_sel=1 (64-bit mode)
+ RA=9223372036854775807 (0x7fffffffffffffff) RB=1 (0x0000000000000001) msb_64b_sel=1
+ OV_in=0 CA_in=0 SO_in=0
+ PASS: EX2 RT = 0x8000000000000000 as expected
+ PASS: EX3 RT = 0x8000000000000000 as expected
+ PASS: EX3 XER[OV] = 1 as expected
+ PASS: EX3 XER[CA] = 0 as expected (unchanged)
+ PASS: EX3 XER[SO] = 1 as expected (sticky: SO_in OR OV_out)
+---------------------------------------------
+Test 15: negative signed overflow (min neg + -1), msb_64b_sel=1 (64-bit mode)
+ RA=-9223372036854775808 (0x8000000000000000) RB=-1 (0xffffffffffffffff) msb_64b_sel=1
+ OV_in=0 CA_in=0 SO_in=0
+ PASS: EX2 RT = 0x7fffffffffffffff as expected
+ PASS: EX3 RT = 0x7fffffffffffffff as expected
+ PASS: EX3 XER[OV] = 1 as expected
+ PASS: EX3 XER[CA] = 0 as expected (unchanged)
+ PASS: EX3 XER[SO] = 1 as expected (sticky: SO_in OR OV_out)
+---------------------------------------------
+Test 16 [DIAGNOSTIC]: DIAG: same as above but msb_64b_sel=0 - is OV still 1, or does it change?
+ RA=9223372036854775807 (0x7fffffffffffffff) RB=1 (0x0000000000000001) msb_64b_sel=0
+ PASS: EX3 RT = 0x8000000000000000 as expected
+ OBSERVED: XER[OV] = 0 (no hard expectation asserted - see report)
+---------------------------------------------
+Test 17 [DIAGNOSTIC]: DIAG: same as above but msb_64b_sel=0 - is OV still 1, or does it change?
+ RA=-9223372036854775808 (0x8000000000000000) RB=-1 (0xffffffffffffffff) msb_64b_sel=0
+ PASS: EX3 RT = 0x7fffffffffffffff as expected
+ OBSERVED: XER[OV] = 0 (no hard expectation asserted - see report)
+---------------------------------------------
+Test 18: CA_in=0 must remain 0 after addex (no overflow case)
+ RA=1 (0x0000000000000001) RB=1 (0x0000000000000001) msb_64b_sel=0
+ OV_in=0 CA_in=0 SO_in=0
+ PASS: EX2 RT = 0x0000000000000002 as expected
+ PASS: EX3 RT = 0x0000000000000002 as expected
+ PASS: EX3 XER[OV] = 0 as expected
+ PASS: EX3 XER[CA] = 0 as expected (unchanged)
+ PASS: EX3 XER[SO] = 0 as expected (sticky: SO_in OR OV_out)
+---------------------------------------------
+Test 19: SO_in=1 must remain 1 even though OV transitions to 1; CA_in=1 must remain 1
+ RA=9223372036854775807 (0x7fffffffffffffff) RB=1 (0x0000000000000001) msb_64b_sel=1
+ OV_in=0 CA_in=1 SO_in=1
+ PASS: EX2 RT = 0x8000000000000000 as expected
+ PASS: EX3 RT = 0x8000000000000000 as expected
+ PASS: EX3 XER[OV] = 1 as expected
+ PASS: EX3 XER[CA] = 1 as expected (unchanged)
+ PASS: EX3 XER[SO] = 1 as expected (sticky: SO_in OR OV_out)
+---------------------------------------------
+Ran 19 test case(s)
+NOTE: Reserved CY (1,2,3) trapping, decode false-positive checks,
+dual-pipe comparison, GPR write-back, regression on other add/subf
+instructions, and full-system boot are OUT OF SCOPE for this
+ALU-only testbench and are not exercised above.
+*** OVERALL: PASS (all hard-asserted checks) - addex implementation verified at ALU level ***
+---------------------------------------------
