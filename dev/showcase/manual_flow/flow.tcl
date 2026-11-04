@@ -86,4 +86,19 @@ check_antennas
 # Save the database for the GDS step
 write_def results/gcd_final.def
 write_db results/gcd_final.odb
+# ---- Reports, written automatically on every run ----
+file mkdir reports
+proc save_rpt {file script} {
+    sta::redirect_file_begin $file
+    uplevel 1 $script
+    sta::redirect_file_end
+}
+save_rpt reports/setup_max.rpt  {report_checks -path_delay max -fields {slew cap input_pins} -digits 3}
+save_rpt reports/hold_min.rpt   {report_checks -path_delay min -fields {slew cap input_pins} -digits 3}
+save_rpt reports/clock_skew.rpt {report_clock_skew}
+save_rpt reports/wns_tns.rpt    {report_tns; report_wns; report_worst_slack -max; report_worst_slack -min}
+save_rpt reports/power.rpt      {report_power}
+save_rpt reports/area.rpt       {report_design_area}
+save_rpt reports/antenna.rpt    {check_antennas}
+save_rpt reports/cell_usage.rpt {report_cell_usage}
 exit

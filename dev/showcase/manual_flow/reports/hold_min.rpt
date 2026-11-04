@@ -1,0 +1,57 @@
+Startpoint: reset (input port clocked by vclk_core_clock)
+Endpoint: _440_ (rising edge-triggered flip-flop clocked by core_clock)
+Path Group: core_clock
+Path Type: min
+
+     Cap     Slew    Delay     Time   Description
+---------------------------------------------------------------------------
+            0.000    0.000    0.000   clock vclk_core_clock (rise edge)
+                     0.070    0.070   clock network delay (ideal)
+                     0.050    0.120 ^ input external delay
+   3.910    0.000    0.000    0.120 ^ reset (in)
+            0.000    0.000    0.120 ^ _319_/A1 (NOR3_X1)
+   1.641    0.003    0.005    0.125 v _319_/ZN (NOR3_X1)
+            0.003    0.000    0.126 v _440_/D (DFF_X1)
+                              0.126   data arrival time
+
+                     0.000    0.000   clock core_clock (rise edge)
+                     0.054    0.054   clock network delay (propagated)
+                     0.000    0.054   clock reconvergence pessimism
+                              0.054 ^ _440_/CK (DFF_X1)
+                     0.004    0.058   library hold time
+                              0.058   data required time
+---------------------------------------------------------------------------
+                              0.058   data required time
+                             -0.126   data arrival time
+---------------------------------------------------------------------------
+                              0.068   slack (MET)
+
+
+Startpoint: _441_ (rising edge-triggered flip-flop clocked by core_clock)
+Endpoint: resp_val (output port clocked by vclk_core_clock)
+Path Group: vclk_core_clock
+Path Type: min
+
+     Cap     Slew    Delay     Time   Description
+---------------------------------------------------------------------------
+                     0.000    0.000   clock core_clock (rise edge)
+                     0.054    0.054   clock network delay (propagated)
+            0.012    0.000    0.054 ^ _441_/CK (DFF_X1)
+   1.701    0.010    0.067    0.121 ^ _441_/QN (DFF_X1)
+            0.010    0.000    0.121 ^ _402_/A3 (NOR3_X1)
+   2.320    0.007    0.011    0.132 v _402_/ZN (NOR3_X1)
+            0.007    0.000    0.132 v resp_val (out)
+                              0.132   data arrival time
+
+            0.000    0.000    0.000   clock vclk_core_clock (rise edge)
+                     0.070    0.070   clock network delay (ideal)
+                     0.000    0.070   clock reconvergence pessimism
+                    -0.050    0.020   output external delay
+                              0.020   data required time
+---------------------------------------------------------------------------
+                              0.020   data required time
+                             -0.132   data arrival time
+---------------------------------------------------------------------------
+                              0.112   slack (MET)
+
+

@@ -1,0 +1,10 @@
+Clock core_clock
+   0.05 source latency _416_/CK ^
+  -0.05 target latency _439_/CK ^
+   0.00 CRPR
+--------------
+  -0.00 setup skew
+
+Clock vclk_core_clock
+No launch/capture paths found.
+
